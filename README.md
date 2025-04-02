@@ -44,7 +44,7 @@ Ensure you have the following installed:
 
 1. Start a chat session by running `M-x emacs-ollama-chat`.
 2. Interact with the LLM by typing your messages.
-3. Press `RET` to send your message and receive a response.
+3. Press `RET` twice to send your message and receive a response.
 
 ## Customization
 
@@ -56,8 +56,8 @@ You can customize various aspects of `ollama-chat-mode`:
 - **Buffer Name**: Change the chat buffer name via `ollama-chat-mode:ollama-chat-buffer`.
 
 ## Contact
--
--For further information or issues, please check the [GitHub repository](https://github.com/v1st-git/emacs-ollama-chat) or contact the maintainer via [LinkedIn](https://www.linkedin.com/in/vladimir-stavrov-a9803b115).
+
+For further information or issues, please check the [GitHub repository](https://github.com/v1st-git/emacs-ollama-chat) or contact the maintainer via [LinkedIn](https://www.linkedin.com/in/vladimir-stavrov-a9803b115).
 
 ## License
 
