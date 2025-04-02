@@ -55,6 +55,10 @@ You can customize various aspects of `ollama-chat-mode`:
 - **Keystrings**: Customize human and bot keystrings for message formatting.
 - **Buffer Name**: Change the chat buffer name via `ollama-chat-mode:ollama-chat-buffer`.
 
+## Contact
+-
+-For further information or issues, please check the [GitHub repository](https://github.com/v1st-git/emacs-ollama-chat) or contact the maintainer via [LinkedIn](https://www.linkedin.com/in/vladimir-stavrov-a9803b115).
+
 ## License
 
 `ollama-chat-mode` is licensed under the GNU General Public License v3.0 or later.
