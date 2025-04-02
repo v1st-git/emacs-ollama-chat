@@ -1,5 +1,5 @@
 # emacs-ollama-chat
-yet another emacs client to chat with LLM using Ollama API
+yet another (trivial-minimal) emacs client to chat with LLM using Ollama API
 # README.md for `ollama-chat-mode` Emacs Package
 # (created from and by ollama-chat-mode.el using phi4:latest LLM)
 
