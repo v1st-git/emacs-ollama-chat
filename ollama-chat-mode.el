@@ -1,8 +1,9 @@
+;	$Id: ollama-chat-mode.el,v 1.3 2025/04/03 13:52:11 vst Exp vst $	
 ;;; ollama-chat-mode.el --- chat with local LLM using ollama API
 
 ;; Copyright (C) 2025- Vladimir Stavrov
 
-;; Maintainer: https://www.linkedin.com/in/vladimir-stavrov-a9803b115
+;; Maintainer: https://github.com/v1st-git
 ;; Keywords: Emacs, Eliza, chat-bot, ollama, LLM
 
 ;; This file is part of GNU Emacs.
@@ -35,11 +36,11 @@
   "Ollama chat client for Emacs."
   :group 'ollama-chat-mode)
 
-(defcustom ollama-chat-mode:endpoint "http://localhost:11434/api/generate"
+(defcustom ollama-chat-mode:ollama-endpoint "http://localhost:11434/api/generate"
   "Ollama http service endpoint."
   :group 'ollama-chat-mode
   :type 'string)
-;;;
+
 (defcustom ollama-chat-mode:model-name "phi4:latest"
   "Ollama model."
   :group 'ollama-chat-mode
@@ -82,7 +83,6 @@
 Like Text mode with Auto Fill mode except that RET when point is after a newline, 
 or LFD at any time, reads the sentence before point until <human> keystring, 
 and prints the answer, received from Ollama API"
-  ;;;(make-ollama-chat-variables)
   (turn-on-auto-fill)
   (goto-char (point-max))
   (ollama-chat-type (list "" "Here you can interact with LLM model by Ollama api."
@@ -128,7 +128,7 @@ and prints the answer, received from Ollama API"
 ;; Main processing function for sentences that have been read.
 (defun ollama-process-query (query-text)
   "Get answer to input query text."
-  (ollama-prompt ollama-chat-mode:endpoint query-text ollama-chat-mode:model-name))
+  (ollama-prompt ollama-chat-mode:ollama-endpoint query-text ollama-chat-mode:model-name))
 
 (defun ollama-chat-doc-ollama (query-text)
   "Insert LLM answer, received from Ollama API, to chat buffer"
