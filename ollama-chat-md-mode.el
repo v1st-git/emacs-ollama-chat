@@ -153,6 +153,6 @@ and prints the answer, received from Ollama API"
 
 
 
-(provide 'ollama-chat-mode)
+(provide 'ollama-chat-md-mode)
 
 ;;; ollama-chat-md-mode.el ends here
