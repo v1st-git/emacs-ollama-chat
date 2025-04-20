@@ -82,7 +82,7 @@ or LFD at any time, reads the sentence before point until <human> keystring,
 and prints the answer, received from Ollama API"
   (turn-on-auto-fill)
   (goto-char (point-max))
-  (ollama-chat-type (list "<!--" "Here you can interact with LLM model by Ollama api."
+  (ollama-chat-type (list "<!--" "Here you can interact with LLM model by Ollama API."
 			  "Each time you are finished talking, type RET twice ." "-->"))
   (insert "\n"))
 
