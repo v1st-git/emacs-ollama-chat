@@ -26,7 +26,6 @@
 ;; The single entry point `emacs-ollama-chat', implements a chat with LLM using ollama API.
 ;; It is successor of the classic ELIZA demonstration of pseudo-AI and doctor.el.
 
-
 (require 'json)
 (require 'cl-lib)
 (require 'url)
@@ -72,8 +71,6 @@
   :group 'ollama-chat-md-mode
   :type 'boolean)
 
-
-
 (defvar ollama-chat-md-mode-map
   (let ((map (make-sparse-keymap)))
     (define-key map "\n" 'ollama-chat-read-print)
@@ -101,8 +98,6 @@ and prints the answer, received from Ollama API"
   (insert "\n")
   )
 
-
-
 ;;;###autoload
 (defun emacs-ollama-chat ()
   "Switch to *emacs-ollama-chat* buffer and start chatting."
@@ -136,7 +131,6 @@ and prints the answer, received from Ollama API"
 	 (buffer-substring-no-properties (point) (goto-char (point-max)))))
     sentence))
 
-
 (defun ollama-chat-fetch (url prompt model)
   "sends HTTP POST request to url with body, containing prompt and model, wrapped to json.
    returns response body (json expected) or error message if error occurs"
@@ -230,8 +224,6 @@ and prints the answer, received from Ollama API"
 	 )
     ans_string
     ))
-
-
 
 (provide 'ollama-chat-md-mode)
 
