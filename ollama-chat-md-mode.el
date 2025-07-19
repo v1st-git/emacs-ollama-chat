@@ -80,6 +80,11 @@
     (define-key map "\r" 'ollama-chat-ret-or-read)
     map))
 
+(defun ollama-chat-type (sentences_list)
+  "concatenate input list of strings to one string and insert it to current buffer"
+  (insert (mapconcat #'ollama-chat-object-to-string sentences_list "\n"))
+  )
+
 (define-derived-mode ollama-chat-md-mode markdown-mode "Ollama-Chat"
   "Major mode for running the Emacs-Ollama-Chat (ex. Eliza) program.
 Like Markdown mode except that RET when point is after a newline, 
@@ -87,11 +92,14 @@ or LFD at any time, reads the sentence before point until <human> keystring,
 and prints the answer, received from Ollama API"
   (turn-on-auto-fill)
   (goto-char (point-max))
-  (ollama-chat-type (list "<!--" "Here you can interact with LLM model by Ollama API."
+  (ollama-chat-type (list ollama-chat-md-mode:bot-keystring
+		     "<!--" "Here you can interact with LLM model by Ollama API."
 			  "Customize LLM model name etc in customization group"
 			  "'ollama-chat-md-mode'"
-			  "Each time you are finished talking, type RET twice ." "-->"))
-  (insert "\n"))
+			  "Each time you are finished talking, type RET twice ." "-->"
+			  ollama-chat-md-mode:human-keystring))
+  (insert "\n")
+  )
 
 
 
