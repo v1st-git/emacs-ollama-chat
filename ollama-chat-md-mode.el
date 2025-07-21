@@ -1,4 +1,4 @@
-;;	$Id: ollama-chat-md-mode.el,v 1.6 2025/05/30 08:03:01 vst Exp vst $	
+;;	$Id: ollama-chat-md-mode.el,v 1.8 2025/07/14 11:59:30 vst Exp vst $	
 ;;; ollama-chat-md-mode.el --- chat with local LLM using Ollama API, markdown mode
 
 ;; Copyright (C) 2025- Vladimir Stavrov
@@ -25,6 +25,7 @@
 
 ;; The single entry point `emacs-ollama-chat', implements a chat with LLM using ollama API.
 ;; It is successor of the classic ELIZA demonstration of pseudo-AI and doctor.el.
+
 
 (require 'json)
 (require 'cl-lib)
@@ -71,16 +72,13 @@
   :group 'ollama-chat-md-mode
   :type 'boolean)
 
+
+
 (defvar ollama-chat-md-mode-map
   (let ((map (make-sparse-keymap)))
     (define-key map "\n" 'ollama-chat-read-print)
     (define-key map "\r" 'ollama-chat-ret-or-read)
     map))
-
-(defun ollama-chat-type (sentences_list)
-  "concatenate input list of strings to one string and insert it to current buffer"
-  (insert (mapconcat #'ollama-chat-object-to-string sentences_list "\n"))
-  )
 
 (define-derived-mode ollama-chat-md-mode markdown-mode "Ollama-Chat"
   "Major mode for running the Emacs-Ollama-Chat (ex. Eliza) program.
@@ -89,15 +87,14 @@ or LFD at any time, reads the sentence before point until <human> keystring,
 and prints the answer, received from Ollama API"
   (turn-on-auto-fill)
   (goto-char (point-max))
-  (ollama-chat-type (list ollama-chat-md-mode:bot-keystring
-		     "<!--" "Here you can interact with LLM model by Ollama API."
+  (ollama-chat-type (list "<!--" "Here you can interact with LLM model by Ollama API."
 			  "Customize LLM model name etc in customization group"
 			  "'ollama-chat-md-mode'"
-			  "Each time you are finished talking, type RET twice ." "-->"
-			  ollama-chat-md-mode:human-keystring))
-  (insert "\n")
-  )
+			  "Each time you are finished talking, type RET twice ." "-->"))
+  (insert "\n"))
 
+
+
 ;;;###autoload
 (defun emacs-ollama-chat ()
   "Switch to *emacs-ollama-chat* buffer and start chatting."
@@ -127,10 +124,16 @@ and prints the answer, received from Ollama API"
   (goto-char (point-max))
   (search-backward ollama-chat-md-mode:human-keystring) ; find latest human keystring
   (search-forward ollama-chat-md-mode:human-keystring) ; set point after keystring
+  (while (and (not (eobp))         ; Ensure we don't go past end of buffer
+              (looking-at "^[ \t\n]*$")) ; Check if line is only whitespace
+    (forward-line 1))             ; Move to the next line
+
   (let ((sentence
 	 (buffer-substring-no-properties (point) (goto-char (point-max)))))
-    sentence))
+    sentence
+    ))
 
+
 (defun ollama-chat-fetch (url prompt model)
   "sends HTTP POST request to url with body, containing prompt and model, wrapped to json.
    returns response body (json expected) or error message if error occurs"
@@ -193,7 +196,8 @@ and prints the answer, received from Ollama API"
 
 (defun ollama-chat-doc-ollama (query-text)
   "Return LLM answer, received from Ollama API"
-  (let* ((answer_string (ollama-chat-answer (list (ollama-chat-process-query query-text)))))
+  (let* ((answer_string
+	  (ollama-chat-answer query-text)))
     answer_string
     ))
 
@@ -204,26 +208,37 @@ and prints the answer, received from Ollama API"
   (if (stringp object) object (prin1-to-string object))
   )
 
-(defun ollama-chat-answer (ans_list)
+(defun ollama-chat-answer (query_text)
   "Returns concatenated string with time and model name from a list of symbols or strings"
-  (let* ((bot_header_format
-	  (concat ollama-chat-md-mode:time-format
+  (let* ((start_timestamp (format-time-string ollama-chat-md-mode:time-format))
+	 (start_time (current-time))
+	 (llm_answer_list
+	   (list (ollama-chat-process-query query-text)))
+	 (elapsed_time
+	  (float-time (time-subtract (current-time) start_time)))
+	 (bot_header_format
+	  (concat start_timestamp "-"
+		  ollama-chat-md-mode:time-format
+		  "="
+		  (format "%.3fs\n" elapsed_time)
 		  "(" ollama-chat-md-mode:model-name ")"
 		  ollama-chat-md-mode:bot-keystring
 		  "\n"
 		  ))
-	 (ans_string
+	 (llm_answer_string
 	  (mapconcat
 	   #'ollama-chat-object-to-string
-	   ans_list))
-	 (ans_string
+	   llm_answer_list))
+	 (llm_answer_string
 	  (concat (format-time-string bot_header_format)
-		  ans_string
+		  llm_answer_string
 		  "\n\n"
 		  ollama-chat-md-mode:human-keystring))
 	 )
-    ans_string
+    llm_answer_string
     ))
+
+
 
 (provide 'ollama-chat-md-mode)
 
